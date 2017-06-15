@@ -55,7 +55,7 @@ module Capistrano
 
       def comment_hash
         {
-          body: 'Issue transited automatically during deployment.'
+          body: "Issue transited automatically during deployment by #{fetch(:git_user_email)}"
         }
       end
     end
