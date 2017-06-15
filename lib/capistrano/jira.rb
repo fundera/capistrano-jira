@@ -2,6 +2,7 @@ require 'capistrano/jira/version'
 require 'capistrano/jira/errors'
 require 'capistrano/jira/issue_finder'
 require 'capistrano/jira/issue_transiter'
+require 'capistrano/jira/version_maker'
 require 'jira-ruby'
 
 module Capistrano

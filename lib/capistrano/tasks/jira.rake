@@ -8,6 +8,7 @@ namespace :load do
     set :jira_transition_name,       nil
     set :jira_filter_jql,            nil
     set :jira_comment_on_transition, true
+    set :jira_fix_version,           DateTime.now.strftime('%Y%m%d %H%M')
   end
 end
 
@@ -18,6 +19,8 @@ namespace :jira do
       info 'Looking for issues'
       begin
         issues = Capistrano::Jira::IssueFinder.new.find
+        info 'creating version'
+        Capistrano::Jira::VersionMaker.new(issues.first).create_version
         issues.each do |issue|
           begin
             Capistrano::Jira::IssueTransiter.new(issue).transit
