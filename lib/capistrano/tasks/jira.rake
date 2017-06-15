@@ -15,7 +15,7 @@ end
 namespace :jira do
   desc 'Find and transit possible JIRA issues'
   task :find_and_transit do |_t|
-    on :all do |_host|
+    on :jira do |_host|
       info 'Looking for issues'
       begin
         issues = Capistrano::Jira::IssueFinder.new.find
