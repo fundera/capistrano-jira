@@ -15,7 +15,7 @@ end
 namespace :jira do
   desc 'Find and transit possible JIRA issues'
   task :find_and_transit do |_t|
-    on :jira do |_host|
+    on roles(:jira) do |_host|
       info 'Looking for issues'
       begin
         issues = Capistrano::Jira::IssueFinder.new.find
@@ -37,7 +37,7 @@ namespace :jira do
 
   desc 'Check JIRA setup'
   task :check do
-    on :jira do
+    on roles(:jira) do |_host|
       errored = false
       required_params =
         %i(jira_username jira_password jira_site jira_project_key
@@ -65,8 +65,8 @@ namespace :jira do
       unless exist
         raise StandardError, "Project #{fetch(:jira_project_key)} not found"
       end
+      puts '<= OK'
     end
-    puts '<= OK'
   end
 
   after 'deploy:finished', 'jira:find_and_transit'
