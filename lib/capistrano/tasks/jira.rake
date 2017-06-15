@@ -19,7 +19,7 @@ namespace :jira do
       info 'Looking for issues'
       begin
         issues = Capistrano::Jira::IssueFinder.new.find
-        info 'creating version'
+        info "creating version #{fetch(:jira_fix_version)}"
         Capistrano::Jira::VersionMaker.new(issues.first).create_version
         issues.each do |issue|
           begin
