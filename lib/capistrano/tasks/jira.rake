@@ -20,7 +20,7 @@ namespace :jira do
       begin
         issues = Capistrano::Jira::IssueFinder.new.find
         info "creating version #{fetch(:jira_fix_version)}"
-        Capistrano::Jira::VersionMaker.new(issues.first).create_version
+        Capistrano::Jira::VersionMaker.new(issues.first).create_version if issues.present?
         issues.each do |issue|
           begin
             Capistrano::Jira::IssueTransiter.new(issue).transit
