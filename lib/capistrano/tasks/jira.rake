@@ -20,7 +20,12 @@ namespace :jira do
       begin
         issues = Capistrano::Jira::IssueFinder.new.find
         info "creating version #{fetch(:jira_fix_version)}"
-        Capistrano::Jira::VersionMaker.new(issues.first).create_version if issues.present?
+        fv = Capistrano::Jira.client.Version.build
+        fv.save({
+          name: fetch(:jira_fix_version),
+          project: fetch(:jira_project_key),
+        })
+        fv.fetch
         issues.each do |issue|
           begin
             Capistrano::Jira::IssueTransiter.new(issue).transit
@@ -29,6 +34,7 @@ namespace :jira do
             warn "#{issue.key}\t\u{2717} #{e.message}"
           end
         end
+        fv.save({released: true})
       rescue Capistrano::Jira::FinderError => e
         error "#{e.class} #{e.message}"
       end
